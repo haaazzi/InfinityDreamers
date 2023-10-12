@@ -1,6 +1,7 @@
 package com.nhnacademy.node;
 
 import com.nhnacademy.Wire;
+import com.nhnacademy.server.Request;
 
 public class InputOutputNode extends ActiveNode {
     Wire[] inputWires;
@@ -31,7 +32,7 @@ public class InputOutputNode extends ActiveNode {
 
     public void output(Request request) {
         for (Wire wire : outputWires) {
-            wire.put(request);
+            // wire.put(request);
         }
     }
 }
