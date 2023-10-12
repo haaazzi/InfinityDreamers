@@ -13,9 +13,10 @@ public class TCPEcho extends InputOutputNode {
     @Override
     void process() {
         if ((getInputWire(0) != null) && getInputWire(0).hasMessage()) {
-            Request request = getInputWire(0).get();
-            System.out.println(request.getUrl());
-            output(request);
+            //Request request = getInputWire(0).get();
+            Message message = getInputWire(0).get();
+            System.out.println(message.getRequest().getUrl());
+            output(message);
         }
     }
 }

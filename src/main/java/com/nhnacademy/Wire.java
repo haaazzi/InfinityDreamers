@@ -3,24 +3,25 @@ package com.nhnacademy;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.nhnacademy.node.Request;
+import com.nhnacademy.node.Message;
+//import com.nhnacademy.node.Request;
 
 public class Wire {
-    Queue<Request> requestQueue;
+    Queue<Message> messageQueue;
 
     public Wire() {
-        requestQueue = new LinkedList<>();
+        messageQueue = new LinkedList<>();
     }
 
-    public void put(Request requset) {
-        requestQueue.add(requset);
+    public void put(Message message) {
+        messageQueue.add(message);
     }
 
     public boolean hasMessage() {
-        return !requestQueue.isEmpty();
+        return !messageQueue.isEmpty();
     }
 
-    public Request get() {
-        return requestQueue.poll();
+    public Message get() {
+        return messageQueue.poll();
     }
 }
