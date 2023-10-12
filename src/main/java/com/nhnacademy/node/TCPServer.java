@@ -56,7 +56,7 @@ public class TCPServer extends InputOutputNode {
                         break;
                     }
                 }
-                server.output(new Request(id, builder.toString(), socket));
+                // server.output(new Request(id, builder.toString(), socket));
 
             } catch (Exception e) {
                 // TODO: handle exception
