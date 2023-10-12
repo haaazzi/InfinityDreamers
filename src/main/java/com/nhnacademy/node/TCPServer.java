@@ -13,16 +13,16 @@ import java.util.UUID;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 
-public class Server extends InputOutputNode {
+public class TCPServer extends InputOutputNode {
     class Handler implements Runnable {
         UUID id;
         Socket socket;
         BufferedReader reader;
         BufferedWriter writer;
-        Server server;
+        TCPServer server;
         Thread thread;
 
-        public Handler(Socket socket, Server server) throws IOException {
+        public Handler(Socket socket, TCPServer server) throws IOException {
             id = UuidCreator.getTimeBased();
             this.socket = socket;
             this.server = server;
@@ -55,7 +55,7 @@ public class Server extends InputOutputNode {
                         break;
                     }
                 }
-                server.output(new Request(builder.toString()));
+                server.output(new Request(builder.toString(), socket));
 
             } catch (Exception e) {
                 // TODO: handle exception
@@ -64,13 +64,13 @@ public class Server extends InputOutputNode {
 
     }
 
-    int port = 80;
+    int port = 8080;
     ServerSocket serverSocket;
     String id;
     Thread receiverThread;
     Map<UUID, Handler> handlerMap;
 
-    public Server(String name) {
+    public TCPServer(String name) {
         super(name, 1, 1);
         handlerMap = new HashMap<>();
     }
@@ -94,7 +94,7 @@ public class Server extends InputOutputNode {
         try {
             Socket socket = serverSocket.accept();
             System.out.println(socket.getInetAddress());
-            Handler handler = new Handler(socket, serverSocket);
+            Handler handler = new Handler(socket, this);
             // handler
             handler.start();
             handlerMap.put(handler.getId(), handler);
@@ -106,7 +106,7 @@ public class Server extends InputOutputNode {
     }
 
     public static void main(String[] args) {
-        Server server = new Server("TCPServer");
+        TCPServer server = new TCPServer("TCPServer");
         server.start();
     }
 }

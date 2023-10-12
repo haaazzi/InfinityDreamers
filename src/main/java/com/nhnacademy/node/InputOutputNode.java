@@ -1,7 +1,6 @@
 package com.nhnacademy.node;
 
 import com.nhnacademy.Wire;
-import com.nhnacademy.server.Request;
 
 public class InputOutputNode extends ActiveNode {
     Wire[] inputWires;

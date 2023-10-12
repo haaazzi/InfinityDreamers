@@ -1,4 +1,4 @@
-package com.nhnacademy.server;
+package com.nhnacademy.node;
 
 import java.net.Socket;
 import java.util.LinkedList;
