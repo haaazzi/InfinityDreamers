@@ -64,7 +64,7 @@ public class TCPServer extends InputOutputNode {
 
     }
 
-    int port = 80;
+    int port = 8080;
     ServerSocket serverSocket;
     String id;
     Thread receiverThread;
