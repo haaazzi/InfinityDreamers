@@ -108,9 +108,5 @@ public class TCPServer extends InputOutputNode {
     public static void main(String[] args) {
         TCPServer server = new TCPServer("TCPServer");
         server.start();
-<<<<<<< HEAD
-    }
-=======
     }
 }
->>>>>>> 46f4d98 (폴더 수정)

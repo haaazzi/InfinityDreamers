@@ -1,17 +1,9 @@
-<<<<<<< HEAD
 // package com.nhnacademy.trash;
 
 // import java.util.HashMap;
 
 // import com.nhnacademy.node.Request;
 
-=======
-package com.nhnacademy.trash;
-// package com.nhnacademy.server;
-
-// import java.util.HashMap;
-
->>>>>>> 46f4d98 (폴더 수정)
 // public class Options {
 // String deviceId;
 // HashMap<String, String> options;

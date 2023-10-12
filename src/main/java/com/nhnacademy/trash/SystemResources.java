@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 // package com.nhnacademy.trash;
-=======
-package com.nhnacademy.trash;
-// package com.nhnacademy.server;
->>>>>>> 46f4d98 (폴더 수정)
 
 // import java.io.File;
 // import java.lang.management.ManagementFactory;

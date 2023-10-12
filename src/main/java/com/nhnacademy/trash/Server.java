@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 // package com.nhnacademy.trash;
-=======
-package com.nhnacademy.trash;
-// package com.nhnacademy.server;
->>>>>>> 46f4d98 (폴더 수정)
 
 // import java.io.BufferedReader;
 // import java.io.IOException;
@@ -50,9 +45,4 @@ package com.nhnacademy.trash;
 // // TODO: handle exception
 // }
 // }
-<<<<<<< HEAD
 // }
-=======
-
-// }
->>>>>>> 46f4d98 (폴더 수정)
