@@ -14,4 +14,8 @@ public class Request {
         this.socket = socket;
         requestList.add(this);
     }
+
+    public String getUrl() {
+        return url;
+    }
 }

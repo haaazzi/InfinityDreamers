@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.nhnacademy.client.Options;
 import com.nhnacademy.client.Request;
 
 public class Server {
@@ -32,10 +33,13 @@ public class Server {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            // String url = reader.readLine().split(" ")[1];
-            String url = "/ep/temperature?count=10&st=1696772438&et=1696772438";
+            String url = reader.readLine().split(" ")[1];
+            // String url = "/ep/temperature?count=10&st=1696772438&et=1696772438";
 
             Request request = new Request(url, socket);
+            Options options = new Options();
+            options.run();
+            
             // }
             // }
         } catch (Exception e) {
