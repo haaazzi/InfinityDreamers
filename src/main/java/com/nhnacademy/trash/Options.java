@@ -1,7 +1,8 @@
-package com.nhnacademy.trash;
-// package com.nhnacademy.server;
+// package com.nhnacademy.trash;
 
 // import java.util.HashMap;
+
+// import com.nhnacademy.node.Request;
 
 // public class Options {
 // String deviceId;
