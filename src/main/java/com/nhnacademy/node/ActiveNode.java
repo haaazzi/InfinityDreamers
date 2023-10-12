@@ -1,31 +1,41 @@
 package com.nhnacademy.node;
 
+import java.util.UUID;
+
 public abstract class ActiveNode extends Node implements Runnable {
     Thread thread;
 
     ActiveNode() {
         super();
-        thread = new Thread(this, getId());
     }
 
     ActiveNode(String name) {
-        this();
-        setName(name);
+        super(name);
     }
 
-    @Override
-    public String getName() {
-        return thread.getName();
+    ActiveNode(String name, UUID id) {
+        super(name, id);
     }
 
-    @Override
-    public void setName(String name) {
-        thread.setName(name);
+    public void start() {
+        thread = new Thread(this, getName());
+        thread.start();
+    }
+
+    void preprocess() {
+
+    }
+
+    void process() {
+
     }
 
     @Override
     public void run() {
-
+        preprocess();
+        while (true) {
+            process();
+        }
     }
 
 }
