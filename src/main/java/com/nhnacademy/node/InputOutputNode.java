@@ -31,7 +31,23 @@ public class InputOutputNode extends ActiveNode {
 
     public void output(Request request) {
         for (Wire wire : outputWires) {
-            // wire.put(request);
+            wire.put(request);
         }
+    }
+
+    public int getInputWireCount() {
+        return inputWires.length;
+    }
+
+    public int getOutputWireCount() {
+        return outputWires.length;
+    }
+
+    public Wire getInputWire(int index) {
+        return inputWires[index];
+    }
+
+    public Wire getOutputWire(int index) {
+        return outputWires[index];
     }
 }

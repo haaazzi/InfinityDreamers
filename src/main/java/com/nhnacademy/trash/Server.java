@@ -1,5 +1,4 @@
-package com.nhnacademy.trash;
-// package com.nhnacademy.server;
+// package com.nhnacademy.trash;
 
 // import java.io.BufferedReader;
 // import java.io.IOException;
@@ -9,6 +8,8 @@ package com.nhnacademy.trash;
 // import java.util.Date;
 // import java.util.LinkedList;
 // import java.util.Queue;
+
+// import com.nhnacademy.node.Request;
 
 // public class Server {
 // static int port = 80;

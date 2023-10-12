@@ -1,5 +1,4 @@
-package com.nhnacademy.trash;
-// package com.nhnacademy.server;
+// package com.nhnacademy.trash;
 
 // import java.util.ArrayList;
 

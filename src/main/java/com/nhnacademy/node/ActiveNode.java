@@ -33,7 +33,7 @@ public abstract class ActiveNode extends Node implements Runnable {
     @Override
     public void run() {
         preprocess();
-        while (true) {
+        while (thread.isAlive()) {
             process();
         }
     }
