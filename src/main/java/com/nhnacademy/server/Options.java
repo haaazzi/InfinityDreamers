@@ -1,4 +1,4 @@
-package com.nhnacademy.client;
+package com.nhnacademy.server;
 
 import java.util.HashMap;
 

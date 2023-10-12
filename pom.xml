@@ -39,5 +39,10 @@
             <artifactId>json</artifactId>
             <version>20230227</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.f4b6a3</groupId>
+            <artifactId>uuid-creator</artifactId>
+            <version>5.2.0</version>
+        </dependency>
     </dependencies>
 </project>
