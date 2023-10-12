@@ -56,7 +56,8 @@ public class TCPServer extends InputOutputNode {
                         break;
                     }
                 }
-                server.output(new Request(id, builder.toString(), socket));
+                Message message = new Message(new Request(id, builder.toString()));
+                server.output(message);
 
             } catch (Exception e) {
                 // TODO: handle exception
@@ -89,9 +90,9 @@ public class TCPServer extends InputOutputNode {
                     try {
                         if ((getInputWire(0) != null) && getInputWire(0).hasMessage()) {
                             try {
-                                Request request = getInputWire(0).get();
-                                Handler handler = getHandler(request.getId());
-                                handler.write(request.getUrl());
+                                Message message = getInputWire(0).get();
+                                Handler handler = getHandler(message.getRequest().getId());
+                                handler.write(message.getRequest().getUrl());
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();

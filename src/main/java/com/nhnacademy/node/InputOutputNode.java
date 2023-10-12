@@ -29,9 +29,9 @@ public class InputOutputNode extends ActiveNode {
         outputWires[index] = wire;
     }
 
-    public void output(Request request) {
+    public void output(Message message) {
         for (Wire wire : outputWires) {
-            // wire.put(request);
+            wire.put(message);
         }
     }
 
