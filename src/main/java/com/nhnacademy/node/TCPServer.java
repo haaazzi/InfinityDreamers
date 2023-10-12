@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import com.nhnacademy.Wire;
 
 public class TCPServer extends InputOutputNode {
     class Handler implements Runnable {
@@ -38,7 +39,7 @@ public class TCPServer extends InputOutputNode {
         }
 
         public void write(String message) throws IOException {
-            writer.write(message);
+            writer.write(message + "\n");
             writer.flush();
         }
 
@@ -55,7 +56,8 @@ public class TCPServer extends InputOutputNode {
                         break;
                     }
                 }
-                server.output(new Request(builder.toString(), socket));
+                Message message = new Message(new Request(id, builder.toString()));
+                server.output(message);
 
             } catch (Exception e) {
                 // TODO: handle exception
@@ -75,13 +77,35 @@ public class TCPServer extends InputOutputNode {
         handlerMap = new HashMap<>();
     }
 
+    public Handler getHandler(UUID id) {
+        return handlerMap.get(id);
+    }
+
     @Override
     void preprocess() {
         try {
             serverSocket = new ServerSocket(port);
             receiverThread = new Thread(() -> {
-
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        if ((getInputWire(0) != null) && getInputWire(0).hasMessage()) {
+                            try {
+                                Message message = getInputWire(0).get();
+                                Handler handler = getHandler(message.getRequest().getId());
+                                handler.write(message.getRequest().getUrl());
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             });
+            receiverThread.start();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -107,6 +131,15 @@ public class TCPServer extends InputOutputNode {
 
     public static void main(String[] args) {
         TCPServer server = new TCPServer("TCPServer");
+        TCPEcho echo = new TCPEcho();
+        Wire wire = new Wire();
+        Wire wire2 = new Wire();
+        server.connectOutputWire(0, wire);
+        echo.connectInputWire(0, wire);
+        echo.connectOutputWire(0, wire2);
+        server.connectInputWire(0, wire2);
+        echo.start();
         server.start();
+
     }
 }
