@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import com.nhnacademy.Wire;
+import com.nhnacademy.WireType;
 
 public class TCPServer extends InputOutputNode {
     class Handler implements Runnable {
@@ -57,7 +58,7 @@ public class TCPServer extends InputOutputNode {
                     }
                 }
                 Message message = new Message(new Request(id, builder.toString()));
-                server.output(message);
+                server.output(message, WireType.PARSER);
 
             } catch (Exception e) {
                 // TODO: handle exception
@@ -88,9 +89,10 @@ public class TCPServer extends InputOutputNode {
             receiverThread = new Thread(() -> {
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
-                        if ((getInputWire(0) != null) && getInputWire(0).hasMessage()) {
+                        if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
                             try {
-                                Message message = getInputWire(0).get();
+                                Message message = getInputWire(WireType.PARSER).get();
+                                System.out.println(message.getRequest().getUrl());
                                 Handler handler = getHandler(message.getRequest().getId());
                                 handler.write(message.getRequest().getUrl());
                             } catch (IOException e) {
@@ -132,13 +134,19 @@ public class TCPServer extends InputOutputNode {
     public static void main(String[] args) {
         TCPServer server = new TCPServer("TCPServer");
         TCPEcho echo = new TCPEcho();
-        Wire wire = new Wire();
-        Wire wire2 = new Wire();
-        server.connectOutputWire(0, wire);
-        echo.connectInputWire(0, wire);
-        echo.connectOutputWire(0, wire2);
-        server.connectInputWire(0, wire2);
+        URLParserNode parser = new URLParserNode("PARSER");
+        Wire wire = new Wire(WireType.PARSER);
+        Wire wire2 = new Wire(WireType.PARSER);
+        Wire wire3 = new Wire(WireType.PARSER);
+
+        server.connectOutputWire(wire);
+        parser.connectInputWire(wire);
+        parser.connectOutputWire(wire2);
+        echo.connectInputWire(wire2);
+        echo.connectOutputWire(wire3);
+        server.connectInputWire(wire3);
         echo.start();
+        parser.start();
         server.start();
 
     }
