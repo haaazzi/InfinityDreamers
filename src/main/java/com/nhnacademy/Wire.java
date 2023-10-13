@@ -8,9 +8,11 @@ import com.nhnacademy.node.Message;
 
 public class Wire {
     Queue<Message> messageQueue;
+    WireType type;
 
-    public Wire() {
+    public Wire(WireType type) {
         messageQueue = new LinkedList<>();
+        this.type = type;
     }
 
     public void put(Message message) {
@@ -24,4 +26,9 @@ public class Wire {
     public Message get() {
         return messageQueue.poll();
     }
+
+    public WireType getType() {
+        return type;
+    }
+
 }

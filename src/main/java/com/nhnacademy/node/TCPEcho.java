@@ -1,5 +1,7 @@
 package com.nhnacademy.node;
 
+import com.nhnacademy.WireType;
+
 public class TCPEcho extends InputOutputNode {
 
     public TCPEcho(String name) {
@@ -12,11 +14,11 @@ public class TCPEcho extends InputOutputNode {
 
     @Override
     void process() {
-        if ((getInputWire(0) != null) && getInputWire(0).hasMessage()) {
-            //Request request = getInputWire(0).get();
-            Message message = getInputWire(0).get();
+        if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
+            // Request request = getInputWire(0).get();
+            Message message = getInputWire(WireType.PARSER).get();
             System.out.println(message.getRequest().getUrl());
-            output(message);
+            output(message, WireType.PARSER);
         }
     }
 }
