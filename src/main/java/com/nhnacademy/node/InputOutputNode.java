@@ -1,53 +1,59 @@
 package com.nhnacademy.node;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.nhnacademy.Wire;
+import com.nhnacademy.WireType;
 
 public class InputOutputNode extends ActiveNode {
-    Wire[] inputWires;
-    Wire[] outputWires;
+    HashMap<WireType, Wire> inputWires;
+    HashMap<WireType, Wire> outputWires;
 
     public InputOutputNode(String name, int inputCount, int outputCount) {
         super(name);
 
-        inputWires = new Wire[inputCount];
-        outputWires = new Wire[outputCount];
+        inputWires = new HashMap<>();
+        outputWires = new HashMap<>();
     }
 
     public InputOutputNode(int inputCount, int outputCount) {
         super();
 
-        inputWires = new Wire[inputCount];
-        outputWires = new Wire[outputCount];
+        inputWires = new HashMap<>();
+        outputWires = new HashMap<>();
 
     }
 
-    public void connectInputWire(int index, Wire wire) {
-        inputWires[index] = wire;
+    public void connectInputWire(Wire wire) {
+        inputWires.put(wire.getType(), wire);
     }
 
-    public void connectOutputWire(int index, Wire wire) {
-        outputWires[index] = wire;
+    public void connectOutputWire(Wire wire) {
+        outputWires.put(wire.getType(), wire);
     }
 
-    public void output(Message message) {
-        for (Wire wire : outputWires) {
-            wire.put(message);
+    public void output(Message message, WireType type) {
+        for (Map.Entry<WireType, Wire> wire : outputWires.entrySet()) {
+            if (wire.getKey().equals(type)) {
+                wire.getValue().put(message);
+            }
         }
     }
 
     public int getInputWireCount() {
-        return inputWires.length;
+        return inputWires.size();
     }
 
     public int getOutputWireCount() {
-        return outputWires.length;
+        return outputWires.size();
     }
 
-    public Wire getInputWire(int index) {
-        return inputWires[index];
+    public Wire getInputWire(WireType type) {
+        return inputWires.get(type);
     }
 
-    public Wire getOutputWire(int index) {
-        return outputWires[index];
+    public Wire getOutputWire(WireType type) {
+        return outputWires.get(type);
     }
 }
