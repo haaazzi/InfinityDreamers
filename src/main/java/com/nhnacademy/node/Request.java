@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public class Request {
     private String url;
+
     private UUID id;
     HashMap<String, String> options;
 
