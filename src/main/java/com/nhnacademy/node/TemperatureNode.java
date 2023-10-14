@@ -8,8 +8,8 @@ import java.util.HashMap;
 import com.nhnacademy.WireType;
 
 public class TemperatureNode extends InputOutputNode {
-    public TemperatureNode(String name, int inputCount, int outputCount) {
-        super(name, inputCount, outputCount);
+    public TemperatureNode(String name) {
+        super(name);
         // TODO Auto-generated constructor stub
     }
 
@@ -19,7 +19,6 @@ public class TemperatureNode extends InputOutputNode {
     public void process() {
         if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
             Message message = getInputWire(WireType.PARSER).get();
-            System.out.println(message.getRequest().getUrl());
             output(message, WireType.PARSER);
 
             options = message.request.getOptions();

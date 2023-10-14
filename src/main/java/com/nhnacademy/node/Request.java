@@ -29,4 +29,12 @@ public class Request {
     public void setOptions(HashMap<String, String> options) {
         this.options = options;
     }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 }

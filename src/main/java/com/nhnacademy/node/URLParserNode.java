@@ -13,10 +13,10 @@ public class URLParserNode extends InputOutputNode {
     String deviceId;
     HashMap<String, String> options;
     WireType type;
-    StringBuilder requestBuilder;
+    StringBuilder requestBuilder = new StringBuilder();
 
     public URLParserNode(String name) {
-        super(name, 1, 2);
+        super(name);
     }
 
     public long dateConverter(String value) {
@@ -50,18 +50,14 @@ public class URLParserNode extends InputOutputNode {
 
             message = getInputWire(WireType.PARSER).get();
             Request request = message.getRequest();
-
+            String requestString = "";
             String url = request.getUrl();
             String[] urlOptions = url.split("http://");
             urlOptions = urlOptions[1].split("/");
             urlOptions = urlOptions[1].split("\\?");
-            System.out.println(urlOptions[1]);
 
             options = new HashMap<String, String>();
 
-            // GET http://localhost/humidity?format=json&startDt=2023-10-05
-            // 15:00&endDt=2023-10-05 18:00:00&unit=hour
-            // http://ems.nhnacademy.com:1880/ep/temperature/24e124126c457594?count=40&st=1696772438&et=1696772438
             if (urlOptions[1].equals("dev")) {
 
                 if (urlOptions.length > 1) {
@@ -72,7 +68,10 @@ public class URLParserNode extends InputOutputNode {
 
             } else if (urlOptions[0].equals("temperature") || urlOptions[0].equals("humidity")) {
 
+                requestBuilder.append("/ep/");
                 options.put("type", urlOptions[0]);
+                requestBuilder.append(urlOptions[0]);
+                requestBuilder.append("/24e124126c457594?");
 
                 if (urlOptions[0].equals("temperature")) {
                     type = WireType.TEMPERATURE;
@@ -82,29 +81,37 @@ public class URLParserNode extends InputOutputNode {
 
                 if (urlOptions.length > 1) {
 
-                    String urlString = urlOptions[1];
+                    String urlString = urlOptions[1].replaceAll("\"", "");
 
+                    // GET "http://localhost/humidity?format=json&startDt=2023-10-05
+                    // 15:00&endDt=2023-10-05 18:00:00&unit=hour"
+                    // http://ems.nhnacademy.com:1880/ep/temperature/24e124126c457594?count=40&st=1696772438&et=1696772438
                     for (String string : urlString.split("&")) {
                         String key = string.split("=")[0];
                         String value = string.split("=")[1];
 
                         if (key.equals("startDt") || key.equals("endDt")) {
+                            if (key.equals("startDt")) {
+                                key = "st";
+                            } else {
+                                key = "et";
+                            }
                             value = dateConverter(value) + "";
                         }
-
+                        requestBuilder.append(key + "=" + value + "&");
                         options.put(key, value);
-
                     }
-
-                    for (Map.Entry<String, String> set : options.entrySet()) {
-                        System.out.println(set.getKey() + " = " + set.getValue());
-                    }
+                    requestString = requestBuilder.toString().substring(0,
+                            requestBuilder.toString().length() - 1);
+                    // for (Map.Entry<String, String> set : options.entrySet()) {
+                    // System.out.println(set.getKey() + " = " + set.getValue());
+                    // }
 
                 }
             }
 
             request.setOptions(options);
-
+            request.setUrl(requestString);
             output(message, type);
         }
     }

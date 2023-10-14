@@ -10,14 +10,14 @@ public class InputOutputNode extends ActiveNode {
     HashMap<WireType, Wire> inputWires;
     HashMap<WireType, Wire> outputWires;
 
-    public InputOutputNode(String name, int inputCount, int outputCount) {
+    public InputOutputNode(String name) {
         super(name);
 
         inputWires = new HashMap<>();
         outputWires = new HashMap<>();
     }
 
-    public InputOutputNode(int inputCount, int outputCount) {
+    public InputOutputNode() {
         super();
 
         inputWires = new HashMap<>();
