@@ -26,14 +26,12 @@ public class HumidityNode extends InputOutputNode {
             Message message = getInputWire(WireType.HUMIDITY).get();
             String path = message.getRequest().getUrl();
             String requestMessage = "GET " + path + " HTTP/1.1\n";
-            String requestHeader = "Host: ems.nhnacademy.com:1880\n";
             boolean isBody = false;
             StringBuilder responseBuilder = new StringBuilder();
             try {
                 Socket socket = new Socket(host, 1880);
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                BufferedInputStream input = new BufferedInputStream(socket.getInputStream());
                 writer.write(requestMessage + "\r\n");
                 // writer.write(requestHeader);
                 writer.flush();
@@ -60,7 +58,7 @@ public class HumidityNode extends InputOutputNode {
             }
             String contents = responseBuilder.toString();
             Response response = message.getResponse();
-            response.setContents(responseBuilder.toString());
+            response.setContents(contents);
             output(message, WireType.PARSER);
         }
     }
