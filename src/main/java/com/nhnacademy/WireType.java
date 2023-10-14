@@ -9,5 +9,7 @@ public enum WireType {
     XML,
     HTML,
     RESOURCE,
-    SERVER
+    SERVER,
+    HUMTOPARSER,
+    TEMTOPARSER
 }

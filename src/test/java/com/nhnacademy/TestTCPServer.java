@@ -20,11 +20,13 @@ public class TestTCPServer {
 
         Wire wire = new Wire(WireType.PARSER);
         Wire wire2 = new Wire(WireType.HUMIDITY);
-        Wire wire3 = new Wire(WireType.PARSER);
+        Wire wire3 = new Wire(WireType.HUMTOPARSER);
+        // Wire wire3 = new Wire(WireType.PARSER);
+
         Wire wire4 = new Wire(WireType.JSON);
         Wire wire5 = new Wire(WireType.SERVER);
         Wire wire6 = new Wire(WireType.TEMPERATURE);
-        Wire wire7 = new Wire(WireType.PARSER);
+        Wire wire7 = new Wire(WireType.TEMTOPARSER);
         Wire wire8 = new Wire(WireType.RESOURCE);
         Wire wire9 = new Wire(WireType.PARSER);
         Wire wire10 = new Wire(WireType.PARSER);

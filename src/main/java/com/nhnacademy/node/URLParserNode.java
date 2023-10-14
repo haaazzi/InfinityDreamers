@@ -114,7 +114,7 @@ public class URLParserNode extends InputOutputNode {
                         requestString = requestBuilder.toString().substring(0,
                                 requestBuilder.toString().length() - 1);
                     } else {
-                        String currentTime = (System.currentTimeMillis() / 1000 - 20000) + "";
+                        String currentTime = (System.currentTimeMillis() / 1000 - 10) + "";
                         options.put("st", currentTime);
                         requestBuilder.append("st=" + currentTime + "&");
                         options.put("et", currentTime);

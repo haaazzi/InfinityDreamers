@@ -16,7 +16,6 @@ public class JsonNode extends InputOutputNode {
             JSONObject json = (JSONObject) jsonArray.get(0);
             String method = message.getRequest().getMethod();
             JSONObject newJson = new JSONObject();
-            System.out.println(method);
             newJson.put("dateTime", json.get("time"));
             newJson.put(method, json.get("value"));
 

@@ -62,7 +62,7 @@ public class HumidityNode extends InputOutputNode {
             String contents = responseBuilder.toString();
             Response response = message.getResponse();
             response.setContents(contents);
-            output(message, WireType.PARSER);
+            output(message, WireType.HUMTOPARSER);
         }
     }
 }

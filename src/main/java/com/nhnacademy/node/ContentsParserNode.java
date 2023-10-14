@@ -12,9 +12,25 @@ public class ContentsParserNode extends InputOutputNode {
 
     @Override
     void process() {
+        Message message = null;
+        if ((getInputWire(WireType.HUMTOPARSER) != null) && getInputWire(WireType.HUMTOPARSER).hasMessage()) {
+            message = getInputWire(WireType.HUMTOPARSER).get();
+            String format = "";
+            if (message.getRequest().getOptions().containsKey("format")) {
+                format = message.getRequest().getOptions().get("format");
+            } else {
+                format = "json";
+            }
 
-        if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
-            Message message = getInputWire(WireType.PARSER).get();
+            if (format.equalsIgnoreCase("json")) {
+                output(message, WireType.JSON);
+            } else if (format.equalsIgnoreCase("xml")) {
+                output(message, WireType.XML);
+            } else if (format.equalsIgnoreCase("html")) {
+                output(message, WireType.HTML);
+            }
+        } else if ((getInputWire(WireType.TEMTOPARSER) != null) && getInputWire(WireType.TEMTOPARSER).hasMessage()) {
+            message = getInputWire(WireType.TEMTOPARSER).get();
             String format = "";
             if (message.getRequest().getOptions().containsKey("format")) {
                 format = message.getRequest().getOptions().get("format");
