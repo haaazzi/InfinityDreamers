@@ -30,7 +30,7 @@ public class Wire {
         Message message = messageQueue.peek();
         Request request = message.getRequest();
 
-        log.info("ID: {}, Request URL: {}", request.getId(), request.getUrl());
+        // log.info("ID: {}, Request URL: {}", request.getId(), request.getUrl());
         return messageQueue.poll();
     }
 

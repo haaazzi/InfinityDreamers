@@ -1,16 +1,16 @@
 package com.nhnacademy.node;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Response {
-    JSONArray json;
+    JSONObject json;
     String contents;
 
     Response() {
         this("");
     }
 
-    Response(JSONArray json) {
+    Response(JSONObject json) {
         this.json = json;
     }
 
@@ -18,7 +18,7 @@ public class Response {
         this.contents = contents;
     }
 
-    public JSONArray getJson() {
+    public JSONObject getJson() {
         return json;
     }
 
@@ -26,7 +26,7 @@ public class Response {
         return contents;
     }
 
-    public void setJson(JSONArray json) {
+    public void setJson(JSONObject json) {
         this.json = json;
     }
 

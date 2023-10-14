@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -68,7 +69,7 @@ public class TCPServer extends InputOutputNode {
 
     }
 
-    int port = 8080;
+    int port = 80;
     ServerSocket serverSocket;
     String id;
     Thread receiverThread;
@@ -89,16 +90,27 @@ public class TCPServer extends InputOutputNode {
             serverSocket = new ServerSocket(port);
             receiverThread = new Thread(() -> {
                 while (!Thread.currentThread().isInterrupted()) {
+                    StringBuilder responseBuilder = new StringBuilder();
                     try {
-                        if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
+                        if ((getInputWire(WireType.SERVER) != null) && getInputWire(WireType.SERVER).hasMessage()) {
                             try {
-                                Message message = getInputWire(WireType.PARSER).get();
+                                Message message = getInputWire(WireType.SERVER).get();
                                 Handler handler = getHandler(message.getRequest().getId());
+                                String contents;
                                 if (message.getResponse().getJson() == null) {
-                                    handler.write(message.getResponse().getContents());
-                                }else{
-                                    handler.write(message.getResponse().getJson().toString());
+                                    contents = message.getResponse().getContents();
+                                } else {
+                                    contents = message.getResponse().getJson().toString();
                                 }
+                                responseBuilder.append("HTTP/1.1 200 OK\r\n");
+                                responseBuilder.append("Access-Control-Allow-Origin: *\r\n");
+                                responseBuilder.append("Content-type: Application/json" + "; charset=utf-8\r\n");
+                                responseBuilder.append("Content-length: " + contents.length() + "\r\n\r\n");
+                                responseBuilder.append(contents);
+                                responseBuilder.append("\r\n");
+
+                                handler.write(responseBuilder.toString());
+
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
@@ -125,7 +137,7 @@ public class TCPServer extends InputOutputNode {
             Socket socket = serverSocket.accept();
             BlackList blackList = new BlackList();
 
-            if(blackList.checkBlackList(socket.getInetAddress().toString())){
+            if (blackList.checkBlackList(socket.getInetAddress().toString())) {
                 System.out.println("BLOCKED");
                 socket.close();
             }
