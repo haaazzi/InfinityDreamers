@@ -52,62 +52,71 @@ public class URLParserNode extends InputOutputNode {
             Request request = message.getRequest();
             String requestString = "";
             String url = request.getUrl();
+
+            boolean isResource = false;
+            if (url.contains("resources")) {
+                isResource = true;
+            }
+
             String[] urlOptions = url.split("http://");
-            urlOptions = urlOptions[1].split("/");
-            urlOptions = urlOptions[1].split("\\?");
+            if (urlOptions.length > 1) {
+                urlOptions = urlOptions[1].split("/");
+                urlOptions = urlOptions[1].split("\\?");
+                options = new HashMap<String, String>();
 
-            options = new HashMap<String, String>();
+                if (urlOptions[1].equals("dev")) {
 
-            if (urlOptions[1].equals("dev")) {
-
-                if (urlOptions.length > 1) {
-                    options.put("deviceId", urlOptions[2]);
-                }
-
-                type = WireType.DEVICE;
-
-            } else if (urlOptions[0].equals("temperature") || urlOptions[0].equals("humidity")) {
-
-                requestBuilder.append("/ep/");
-                options.put("type", urlOptions[0]);
-                requestBuilder.append(urlOptions[0]);
-                requestBuilder.append("/24e124126c457594?");
-
-                if (urlOptions[0].equals("temperature")) {
-                    type = WireType.TEMPERATURE;
-                } else {
-                    type = WireType.HUMIDITY;
-                }
-
-                if (urlOptions.length > 1) {
-
-                    String urlString = urlOptions[1].replaceAll("\"", "");
-
-                    // GET "http://localhost/humidity?format=json&startDt=2023-10-05
-                    // 15:00&endDt=2023-10-05 18:00:00&unit=hour"
-                    // http://ems.nhnacademy.com:1880/ep/temperature/24e124126c457594?count=40&st=1696772438&et=1696772438
-                    for (String string : urlString.split("&")) {
-                        String key = string.split("=")[0];
-                        String value = string.split("=")[1];
-
-                        if (key.equals("startDt") || key.equals("endDt")) {
-                            if (key.equals("startDt")) {
-                                key = "st";
-                            } else {
-                                key = "et";
-                            }
-                            value = dateConverter(value) + "";
-                        }
-                        requestBuilder.append(key + "=" + value + "&");
-                        options.put(key, value);
+                    if (urlOptions.length > 1) {
+                        options.put("deviceId", urlOptions[2]);
                     }
-                    requestString = requestBuilder.toString().substring(0,
-                            requestBuilder.toString().length() - 1);
-                    // for (Map.Entry<String, String> set : options.entrySet()) {
-                    // System.out.println(set.getKey() + " = " + set.getValue());
-                    // }
 
+                    type = WireType.DEVICE;
+
+                } else if (urlOptions[0].equals("temperature") || urlOptions[0].equals("humidity")) {
+
+                    requestBuilder.append("/ep/");
+                    options.put("type", urlOptions[0]);
+                    requestBuilder.append(urlOptions[0]);
+                    requestBuilder.append("/24e124126c457594?");
+
+                    if (urlOptions[0].equals("temperature")) {
+                        type = WireType.TEMPERATURE;
+                    } else {
+                        type = WireType.HUMIDITY;
+                    }
+
+                    if (urlOptions.length > 1) {
+
+                        String urlString = urlOptions[1].replaceAll("\"", "");
+
+                        // GET "http://localhost/humidity?format=json&startDt=2023-10-05 15:00&endDt=2023-10-05 18:00:00&unit=hour"
+                        // http://ems.nhnacademy.com:1880/ep/temperature/24e124126c457594?count=40&st=1696772438&et=1696772438
+                        for (String string : urlString.split("&")) {
+                            String key = string.split("=")[0];
+                            String value = string.split("=")[1];
+
+                            if (key.equals("startDt") || key.equals("endDt")) {
+                                if (key.equals("startDt")) {
+                                    key = "st";
+                                } else {
+                                    key = "et";
+                                }
+                                value = dateConverter(value) + "";
+                            }
+                            requestBuilder.append(key + "=" + value + "&");
+                            options.put(key, value);
+                        }
+                        requestString = requestBuilder.toString().substring(0,
+                                requestBuilder.toString().length() - 1);
+                        // for (Map.Entry<String, String> set : options.entrySet()) {
+                        // System.out.println(set.getKey() + " = " + set.getValue());
+                        // }
+
+                    }
                 }
+            }
+            if (isResource) {
+                type = WireType.RESOURCE;
             }
 
             request.setOptions(options);

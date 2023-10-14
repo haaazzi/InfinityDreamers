@@ -4,8 +4,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.nhnacademy.node.Message;
-//import com.nhnacademy.node.Request;
+import com.nhnacademy.node.Request;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Wire {
     Queue<Message> messageQueue;
     WireType type;
@@ -24,6 +27,10 @@ public class Wire {
     }
 
     public Message get() {
+        Message message = messageQueue.peek();
+        Request request = message.getRequest();
+
+        log.info("ID: {}, Request URL: {}", request.getId(), request.getUrl());
         return messageQueue.poll();
     }
 

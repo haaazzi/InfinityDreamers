@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import com.nhnacademy.BlackList;
 import com.nhnacademy.Wire;
 import com.nhnacademy.WireType;
 
@@ -93,7 +94,11 @@ public class TCPServer extends InputOutputNode {
                             try {
                                 Message message = getInputWire(WireType.PARSER).get();
                                 Handler handler = getHandler(message.getRequest().getId());
-                                handler.write(message.getResponse().getJson().toString());
+                                if (message.getResponse().getJson() == null) {
+                                    handler.write(message.getResponse().getContents());
+                                }else{
+                                    handler.write(message.getResponse().getJson().toString());
+                                }
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
@@ -118,6 +123,13 @@ public class TCPServer extends InputOutputNode {
     void process() {
         try {
             Socket socket = serverSocket.accept();
+            BlackList blackList = new BlackList();
+
+            if(blackList.checkBlackList(socket.getInetAddress().toString())){
+                System.out.println("BLOCKED");
+                socket.close();
+            }
+
             System.out.println(socket.getInetAddress());
             Handler handler = new Handler(socket, this);
             // handler
