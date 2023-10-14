@@ -46,6 +46,7 @@ public class URLParserNode extends InputOutputNode {
     }
 
     public void process() {
+        requestBuilder = new StringBuilder();
         if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
 
             message = getInputWire(WireType.PARSER).get();
@@ -58,12 +59,18 @@ public class URLParserNode extends InputOutputNode {
                 isResource = true;
             }
 
-            String[] urlOptions = url.split("http://");
-            if (urlOptions.length > 1) {
-                urlOptions = urlOptions[1].split("/");
-                urlOptions = urlOptions[1].split("\\?");
-                options = new HashMap<String, String>();
+            // String[] urlOptions = url.split("http://");
+            String[] urlOptions = url.split(" ");
 
+            String path = urlOptions[1].substring(1);
+            request.setMethod(path);
+            if (path.contains("?")) {
+                path = path.substring(0, path.indexOf("?"));
+            }
+            if (urlOptions.length > 1) {
+                // urlOptions = urlOptions[1].split("/");
+                // urlOptions = urlOptions[1].split("\\?");
+                options = new HashMap<String, String>();
                 if (urlOptions[1].equals("dev")) {
 
                     if (urlOptions.length > 1) {
@@ -72,25 +79,23 @@ public class URLParserNode extends InputOutputNode {
 
                     type = WireType.DEVICE;
 
-                } else if (urlOptions[0].equals("temperature") || urlOptions[0].equals("humidity")) {
+                } else if (path.equals("temperature") || path.equals("humidity")) {
 
                     requestBuilder.append("/ep/");
-                    options.put("type", urlOptions[0]);
-                    requestBuilder.append(urlOptions[0]);
-                    requestBuilder.append("/24e124126c457594?");
-
-                    if (urlOptions[0].equals("temperature")) {
+                    options.put("type", path);
+                    requestBuilder.append(path);
+                    requestBuilder.append("/24e124128c067999?");
+                    if (path.equals("temperature")) {
                         type = WireType.TEMPERATURE;
                     } else {
                         type = WireType.HUMIDITY;
                     }
+                    String urlString = urlOptions[1].replaceAll("\"", "");
 
-                    if (urlOptions.length > 1) {
-
-                        String urlString = urlOptions[1].replaceAll("\"", "");
-
-                        // GET "http://localhost/humidity?format=json&startDt=2023-10-05 15:00&endDt=2023-10-05 18:00:00&unit=hour"
-                        // http://ems.nhnacademy.com:1880/ep/temperature/24e124126c457594?count=40&st=1696772438&et=1696772438
+                    // GET "http://localhost/humidity?format=json&startDt=2023-10-05
+                    // 15:00&endDt=2023-10-05 18:00:00&unit=hour"
+                    // http://ems.nhnacademy.com:1880/ep/temperature/24e124126c457594?count=40&st=1696772438&et=1696772438
+                    if (path.contains("?")) {
                         for (String string : urlString.split("&")) {
                             String key = string.split("=")[0];
                             String value = string.split("=")[1];
@@ -108,20 +113,27 @@ public class URLParserNode extends InputOutputNode {
                         }
                         requestString = requestBuilder.toString().substring(0,
                                 requestBuilder.toString().length() - 1);
+                    } else {
+                        String currentTime = (System.currentTimeMillis() / 1000 - 20000) + "";
+                        options.put("st", currentTime);
+                        requestBuilder.append("st=" + currentTime + "&");
+                        options.put("et", currentTime);
+                        requestBuilder.append("et=" + currentTime);
                         // for (Map.Entry<String, String> set : options.entrySet()) {
                         // System.out.println(set.getKey() + " = " + set.getValue());
                         // }
-
+                        requestString = requestBuilder.toString();
                     }
+
                 }
             }
             if (isResource) {
                 type = WireType.RESOURCE;
             }
-
             request.setOptions(options);
             request.setUrl(requestString);
             output(message, type);
         }
     }
+
 }

@@ -8,5 +8,6 @@ public enum WireType {
     JSON,
     XML,
     HTML,
-    RESOURCE
+    RESOURCE,
+    SERVER
 }

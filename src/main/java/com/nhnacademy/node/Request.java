@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Request {
     private String url;
-
+    private String method;
     private UUID id;
     HashMap<String, String> options;
 
@@ -36,5 +36,13 @@ public class Request {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 }

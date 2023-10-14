@@ -13,9 +13,19 @@ public class JsonNode extends InputOutputNode {
             Message message = getInputWire(WireType.JSON).get();
             String contents = message.getResponse().getContents();
             JSONArray jsonArray = new JSONArray(contents);
-            message.getResponse().setJson(jsonArray);
-            output(message, WireType.PARSER);
+            JSONObject json = (JSONObject) jsonArray.get(0);
+            String method = message.getRequest().getMethod();
+            JSONObject newJson = new JSONObject();
+            System.out.println(method);
+            newJson.put("dateTime", json.get("time"));
+            newJson.put(method, json.get("value"));
+
+            message.getResponse().setJson(newJson);
+            output(message, WireType.SERVER);
         }
+        // String contents = "[{\"dateTime\":\"2023-10-14
+        // 22:01:04\",\"temperature\":40}]";
+
     }
 
 }

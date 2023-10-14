@@ -1,11 +1,18 @@
 package com.nhnacademy.node;
 
+import java.util.Map;
+
+import com.nhnacademy.Wire;
 import com.nhnacademy.WireType;
 
 public class ContentsParserNode extends InputOutputNode {
+    public ContentsParserNode(String name) {
+        super(name);
+    }
 
     @Override
     void process() {
+
         if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
             Message message = getInputWire(WireType.PARSER).get();
             String format = "";

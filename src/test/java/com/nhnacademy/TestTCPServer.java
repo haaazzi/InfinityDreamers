@@ -11,19 +11,18 @@ import com.nhnacademy.node.URLParserNode;
 public class TestTCPServer {
     public static void main(String[] args) {
         TCPServer server = new TCPServer("TCPServer");
-        URLParserNode urlParser = new URLParserNode("PARSER");
+        URLParserNode urlParser = new URLParserNode("parser");
         HumidityNode humidity = new HumidityNode("humidity");
         TemperatureNode temperature = new TemperatureNode("temperature");
-        ResourceNode resourceNode = new ResourceNode();
-
-        ContentsParserNode contentsParser = new ContentsParserNode();
+        ResourceNode resourceNode = new ResourceNode("resource");
+        ContentsParserNode contentsParser = new ContentsParserNode("contents");
         JsonNode json = new JsonNode();
 
         Wire wire = new Wire(WireType.PARSER);
         Wire wire2 = new Wire(WireType.HUMIDITY);
         Wire wire3 = new Wire(WireType.PARSER);
         Wire wire4 = new Wire(WireType.JSON);
-        Wire wire5 = new Wire(WireType.PARSER);
+        Wire wire5 = new Wire(WireType.SERVER);
         Wire wire6 = new Wire(WireType.TEMPERATURE);
         Wire wire7 = new Wire(WireType.PARSER);
         Wire wire8 = new Wire(WireType.RESOURCE);

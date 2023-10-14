@@ -25,15 +25,18 @@ public class HumidityNode extends InputOutputNode {
         if ((getInputWire(WireType.HUMIDITY) != null) && getInputWire(WireType.HUMIDITY).hasMessage()) {
             Message message = getInputWire(WireType.HUMIDITY).get();
             String path = message.getRequest().getUrl();
-            String requestMessage = "GET " + path + " HTTP/1.1\n";
+            String requestMessage = "GET " + path + " HTTP/1.1";
+            // String requestHeader = "Host: ems.nhnacademy.com:1880";
+            // System.out.println(requestHeader);
             boolean isBody = false;
             StringBuilder responseBuilder = new StringBuilder();
             try {
                 Socket socket = new Socket(host, 1880);
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer.write(requestMessage + "\r\n");
-                // writer.write(requestHeader);
+
+                writer.write(requestMessage + "\r\n\r\n");
+                // writer.write(requestHeader + "\r\n\r\n");
                 writer.flush();
                 String line;
                 int len = 0;
