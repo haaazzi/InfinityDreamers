@@ -74,7 +74,7 @@ public class TCPServer extends InputOutputNode {
     Map<UUID, Handler> handlerMap;
 
     public TCPServer(String name) {
-        super(name, 1, 1);
+        super(name);
         handlerMap = new HashMap<>();
     }
 
@@ -92,9 +92,8 @@ public class TCPServer extends InputOutputNode {
                         if ((getInputWire(WireType.PARSER) != null) && getInputWire(WireType.PARSER).hasMessage()) {
                             try {
                                 Message message = getInputWire(WireType.PARSER).get();
-                                System.out.println(message.getRequest().getUrl());
                                 Handler handler = getHandler(message.getRequest().getId());
-                                handler.write(message.getRequest().getUrl());
+                                handler.write(message.getResponse().getJson().toString());
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
@@ -133,20 +132,32 @@ public class TCPServer extends InputOutputNode {
 
     public static void main(String[] args) {
         TCPServer server = new TCPServer("TCPServer");
-        TCPEcho echo = new TCPEcho();
-        URLParserNode parser = new URLParserNode("PARSER");
+        URLParserNode urlParser = new URLParserNode("PARSER");
+        HumidityNode humidity = new HumidityNode("humidity");
+        ContentsParserNode contentsParser = new ContentsParserNode();
+        JsonNode json = new JsonNode();
+
         Wire wire = new Wire(WireType.PARSER);
-        Wire wire2 = new Wire(WireType.PARSER);
+        Wire wire2 = new Wire(WireType.HUMIDITY);
         Wire wire3 = new Wire(WireType.PARSER);
+        Wire wire4 = new Wire(WireType.JSON);
+        Wire wire5 = new Wire(WireType.PARSER);
 
         server.connectOutputWire(wire);
-        parser.connectInputWire(wire);
-        parser.connectOutputWire(wire2);
-        echo.connectInputWire(wire2);
-        echo.connectOutputWire(wire3);
-        server.connectInputWire(wire3);
-        echo.start();
-        parser.start();
+        urlParser.connectInputWire(wire);
+        urlParser.connectOutputWire(wire2);
+        humidity.connectInputWire(wire2);
+        humidity.connectOutputWire(wire3);
+        contentsParser.connectInputWire(wire3);
+        contentsParser.connectOutputWire(wire4);
+        json.connectInputWire(wire4);
+        json.connectOutputWire(wire5);
+        server.connectInputWire(wire5);
+
+        contentsParser.start();
+        json.start();
+        humidity.start();
+        urlParser.start();
         server.start();
 
     }
