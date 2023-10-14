@@ -5,11 +5,11 @@ import com.nhnacademy.WireType;
 public class TCPEcho extends InputOutputNode {
 
     public TCPEcho(String name) {
-        super(name, 1, 1);
+        super(name);
     }
 
     public TCPEcho() {
-        super(1, 1);
+        super();
     }
 
     @Override
