@@ -130,35 +130,4 @@ public class TCPServer extends InputOutputNode {
 
     }
 
-    public static void main(String[] args) {
-        TCPServer server = new TCPServer("TCPServer");
-        URLParserNode urlParser = new URLParserNode("PARSER");
-        HumidityNode humidity = new HumidityNode("humidity");
-        ContentsParserNode contentsParser = new ContentsParserNode();
-        JsonNode json = new JsonNode();
-
-        Wire wire = new Wire(WireType.PARSER);
-        Wire wire2 = new Wire(WireType.HUMIDITY);
-        Wire wire3 = new Wire(WireType.PARSER);
-        Wire wire4 = new Wire(WireType.JSON);
-        Wire wire5 = new Wire(WireType.PARSER);
-
-        server.connectOutputWire(wire);
-        urlParser.connectInputWire(wire);
-        urlParser.connectOutputWire(wire2);
-        humidity.connectInputWire(wire2);
-        humidity.connectOutputWire(wire3);
-        contentsParser.connectInputWire(wire3);
-        contentsParser.connectOutputWire(wire4);
-        json.connectInputWire(wire4);
-        json.connectOutputWire(wire5);
-        server.connectInputWire(wire5);
-
-        contentsParser.start();
-        json.start();
-        humidity.start();
-        urlParser.start();
-        server.start();
-
-    }
 }
